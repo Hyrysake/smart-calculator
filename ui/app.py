@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 """Graphical interface of the calculator, built with CustomTkinter.
 
 The window owns no arithmetic of its own: everything typed on the display
@@ -7,17 +8,35 @@ runs perfectly well on its own.
 
 Author: Махнюк Андрій (Developer)
 """
+=======
+"""Графічний інтерфейс наукового калькулятора на CustomTkinter.
+
+Обчислення виконує core.evaluator, наукові функції надає core.scientific.
+Панель історії додається окремим модулем команди.
+Частина Developer: Махнюк Андрій Сергійович, ІПЗ-22."""
+
+import math
+import re
+>>>>>>> main
 
 import customtkinter as ctk
 
 from core.evaluator import EvaluationError, evaluate, format_result
 from core.scientific import CONSTANTS, DEGREES, RADIANS, build_functions
+<<<<<<< HEAD
 from ui.history_panel import HistoryPanel
 
 # Colours are kept in one place so the whole window can be restyled here.
 # The four groups of keys are deliberately given different weights:
 # scientific keys are the quietest, then digits, then operators, and the
 # equals key is the brightest thing on screen.
+=======
+
+# Кольори кнопок зібрано в одному місці.
+# Наукові функції, цифри та оператори мають різні кольори.
+# Кнопка рівності виділена найяскравіше.
+# Це допомагає швидко знайти потрібну дію.
+>>>>>>> main
 ACCENT = "#2f6bff"
 ACCENT_HOVER = "#1d52d4"
 SCIENTIFIC_COLOR = "#2b303b"
@@ -28,6 +47,7 @@ OPERATOR_COLOR = "#2f4a7a"
 OPERATOR_HOVER = "#3a5b96"
 DANGER = "#c0392b"
 DANGER_HOVER = "#a33025"
+<<<<<<< HEAD
 
 
 class CalculatorApp(ctk.CTk):
@@ -38,6 +58,43 @@ class CalculatorApp(ctk.CTk):
             methods used to remember past calculations. When it is None the
             calculator still works, simply without history.
     """
+=======
+MUTED = "#8b93a7"
+
+
+def _error_message(message: str) -> str:
+    """Перекладає відомі помилки ядра, зберігаючи українські повідомлення."""
+    translations = {
+        "Division by zero": "Ділення на нуль неможливе",
+        "Result is too large": "Результат завеликий",
+        "Result is not a real number": "Результат не є дійсним числом",
+        "Unbalanced brackets": "Перевірте парність дужок",
+        "Incomplete expression": "Вираз неповний або некоректний",
+        "Expression is empty": "Введіть вираз",
+        "math domain error": "Аргумент поза областю визначення функції",
+        "math range error": "Результат завеликий",
+        "float division by zero": "Ділення на нуль неможливе",
+        "cannot convert float infinity to integer": "Результат не є скінченним числом",
+        "cannot convert float NaN to integer": "Результат не є скінченним числом",
+        "0.0 cannot be raised to a negative power": "Нуль не можна піднести до від’ємного степеня",
+    }
+    if message in translations:
+        return translations[message]
+    patterns = [
+        (r"Unknown name '(.*)'", "Невідома назва: {}"),
+        (r"Malformed number at position (\d+)", "Некоректне число, позиція {}"),
+        (r"Unexpected character '(.*)' at position (\d+)", "Неприпустимий символ '{}', позиція {}"),
+    ]
+    for pattern, template in patterns:
+        match = re.fullmatch(pattern, message)
+        if match:
+            return template.format(*match.groups())
+    return message
+
+
+class CalculatorApp(ctk.CTk):
+    """Головне вікно. store — необов’язкове сховище з методом add."""
+>>>>>>> main
 
     def __init__(self, store=None):
         super().__init__()
@@ -45,15 +102,24 @@ class CalculatorApp(ctk.CTk):
         self.store = store
         self.angle_mode = DEGREES
 
+<<<<<<< HEAD
         self.title("Smart Calculator — ІПЗ-22 Dev Team")
+=======
+        self.title("Науковий калькулятор — ІПЗ-22")
+>>>>>>> main
         self.geometry("880x620")
         self.minsize(820, 580)
 
         ctk.set_appearance_mode("dark")
         ctk.set_default_color_theme("blue")
 
+<<<<<<< HEAD
         # One row and two columns: the calculator on the left, the side
         # panel on the right. Only the calculator column stretches.
+=======
+        # Калькулятор ліворуч, майбутня панель історії праворуч.
+        # Ліва колонка розтягується разом із вікном.
+>>>>>>> main
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=0)
@@ -62,12 +128,21 @@ class CalculatorApp(ctk.CTk):
         self._build_side_panel()
         self._bind_keyboard()
 
+<<<<<<< HEAD
     # ------------------------------------------------------------------
     # Construction of the interface
     # ------------------------------------------------------------------
 
     def _build_calculator(self) -> None:
         """Create the display, the mode switch and both keypads."""
+=======
+    # Побудова інтерфейсу
+    # Побудова інтерфейсу
+    # Побудова інтерфейсу
+
+    def _build_calculator(self) -> None:
+        """Створює поле виразу, перемикач кутів і кнопки."""
+>>>>>>> main
         container = ctk.CTkFrame(self, corner_radius=12)
         container.grid(row=0, column=0, sticky="nsew", padx=(16, 8), pady=16)
         container.grid_columnconfigure((0, 1, 2, 3), weight=1)
@@ -84,8 +159,13 @@ class CalculatorApp(ctk.CTk):
         )
         self.display.grid(row=0, column=0, columnspan=4, sticky="ew", padx=12, pady=(14, 4))
 
+<<<<<<< HEAD
         # A dedicated label for problems keeps error text off the display,
         # so a failed calculation never destroys what the user typed.
+=======
+        # Помилка показується окремо від виразу.
+        # Користувач може виправити введення без повторного набору.
+>>>>>>> main
         self.status = ctk.CTkLabel(
             container,
             text="",
@@ -103,7 +183,11 @@ class CalculatorApp(ctk.CTk):
         self.angle_switch.set("DEG")
         self.angle_switch.grid(row=2, column=0, columnspan=2, sticky="w", padx=12, pady=(6, 10))
 
+<<<<<<< HEAD
         # Scientific keys. Each entry is (caption, text inserted).
+=======
+        # Пари: напис кнопки та текст для вставлення.
+>>>>>>> main
         scientific_keys = [
             ("sin", "sin("), ("cos", "cos("), ("tan", "tan("), ("√", "sqrt("),
             ("log", "log("), ("ln", "ln("), ("xʸ", "^"), ("n!", "fact("),
@@ -131,8 +215,13 @@ class CalculatorApp(ctk.CTk):
         self._make_button(keypad, "÷", lambda: self._insert("/"), row=0, column=3,
                           fill=OPERATOR_COLOR, hover=OPERATOR_HOVER)
 
+<<<<<<< HEAD
         # Each row pairs three digits with the operator that sits beside
         # them on a physical calculator. The tuple is (caption, inserted).
+=======
+        # Рядки цифрових кнопок із відповідним оператором.
+        # Пари: напис кнопки та текст для вставлення.
+>>>>>>> main
         digit_rows = [
             [("7", "7"), ("8", "8"), ("9", "9"), ("×", "*")],
             [("4", "4"), ("5", "5"), ("6", "6"), ("−", "-")],
@@ -156,11 +245,16 @@ class CalculatorApp(ctk.CTk):
                           fill=ACCENT, hover=ACCENT_HOVER)
 
     def _build_side_panel(self) -> None:
+<<<<<<< HEAD
         """Create the right-hand panel with memory and calculation history."""
+=======
+        """Створює заглушку панелі історії для подальшої інтеграції."""
+>>>>>>> main
         panel = ctk.CTkFrame(self, corner_radius=12, width=280)
         panel.grid(row=0, column=1, sticky="nsew", padx=(8, 16), pady=16)
         panel.grid_propagate(False)
 
+<<<<<<< HEAD
         self.history_panel = HistoryPanel(panel, store=self.store, on_reuse=self._use_from_history)
         self.history_panel.pack(fill="both", expand=True, padx=10, pady=10)
 
@@ -180,6 +274,23 @@ class CalculatorApp(ctk.CTk):
         Returns:
             The created ``CTkButton``.
         """
+=======
+        ctk.CTkLabel(
+            panel, text="ІСТОРІЯ", font=ctk.CTkFont(size=12, weight="bold"), text_color=MUTED,
+        ).pack(anchor="w", padx=14, pady=(14, 4))
+
+        ctk.CTkLabel(
+            panel, text="Історію буде додано окремо", text_color=MUTED, font=ctk.CTkFont(size=12),
+        ).pack(padx=14, pady=10)
+
+    def _make_button(self, parent, caption, command, row, column,
+                     columnspan=1, fill=None, hover=None, height=52):
+        """Створює кнопку й розміщує її в сітці.
+        
+        parent — контейнер; caption — напис; command — дія.
+        row, column, columnspan — позиція; fill/hover — кольори; height — висота.
+        Повертає створену кнопку."""
+>>>>>>> main
         button = ctk.CTkButton(
             parent,
             text=caption,
@@ -194,43 +305,73 @@ class CalculatorApp(ctk.CTk):
         return button
 
     def _bind_keyboard(self) -> None:
+<<<<<<< HEAD
         """Allow the calculator to be driven from the keyboard."""
+=======
+        """Прив’язує Enter до обчислення, Escape до очищення."""
+>>>>>>> main
         self.bind("<Return>", lambda event: self._calculate())
         self.bind("<KP_Enter>", lambda event: self._calculate())
         self.bind("<Escape>", lambda event: self._clear())
 
+<<<<<<< HEAD
     # ------------------------------------------------------------------
     # Behaviour
     # ------------------------------------------------------------------
 
     def _on_angle_mode_changed(self, value: str) -> None:
         """Switch between degrees and radians for trigonometry."""
+=======
+    # Обробка дій користувача
+    # Обробка дій користувача
+    # Обробка дій користувача
+
+    def _on_angle_mode_changed(self, value: str) -> None:
+        """Перемикає тригонометрію між градусами та радіанами."""
+>>>>>>> main
         self.angle_mode = DEGREES if value == "DEG" else RADIANS
         self.status.configure(text="")
 
     def _insert(self, text: str) -> None:
+<<<<<<< HEAD
         """Append ``text`` to the expression on the display."""
+=======
+        """Додає текст наприкінці виразу й пересуває курсор."""
+>>>>>>> main
         self.status.configure(text="")
         self.expression.set(self.expression.get() + text)
         self.display.icursor("end")
 
     def _clear(self) -> None:
+<<<<<<< HEAD
         """Wipe the display completely."""
+=======
+        """Очищає вираз і повідомлення про помилку."""
+>>>>>>> main
         self.expression.set("")
         self.status.configure(text="")
 
     def _backspace(self) -> None:
+<<<<<<< HEAD
         """Delete the last character of the expression."""
+=======
+        """Видаляє останній символ виразу."""
+>>>>>>> main
         self.status.configure(text="")
         self.expression.set(self.expression.get()[:-1])
 
     def _use_from_history(self, text: str) -> None:
+<<<<<<< HEAD
         """Put a value taken from the history or memory on the display."""
+=======
+        """Показує значення, взяте з історії або пам’яті."""
+>>>>>>> main
         self.status.configure(text="")
         self.expression.set(text)
         self.display.icursor("end")
 
     def _calculate(self) -> None:
+<<<<<<< HEAD
         """Evaluate the current expression and show the result.
 
         On success the expression is replaced by its result and the pair is
@@ -238,6 +379,9 @@ class CalculatorApp(ctk.CTk):
         untouched so it can be corrected, and the reason is shown below the
         display.
         """
+=======
+        """Обчислює вираз. При помилці зберігає введення та показує пояснення."""
+>>>>>>> main
         expression = self.expression.get().strip()
         if not expression:
             return
@@ -245,14 +389,27 @@ class CalculatorApp(ctk.CTk):
         try:
             functions = build_functions(self.angle_mode)
             value = evaluate(expression, functions=functions, constants=CONSTANTS)
+<<<<<<< HEAD
         except EvaluationError as error:
             self.status.configure(text=str(error))
             return
 
         result = format_result(value)
+=======
+            # Нескінченність не можна коректно показати як звичайне число.
+            if not math.isfinite(value):
+                raise EvaluationError("Результат не є скінченним числом")
+            result = format_result(value)
+        except (EvaluationError, ValueError, OverflowError) as error:
+            self.status.configure(text=_error_message(str(error)))
+            return
+>>>>>>> main
         self.expression.set(result)
         self.status.configure(text="")
 
         if self.store is not None:
             self.store.add(expression, result)
+<<<<<<< HEAD
             self.history_panel.refresh()
+=======
+>>>>>>> main
