@@ -19,5 +19,5 @@ def main() -> None:
     app.mainloop()
 
 
-if name == "main":
+if __name__ == "main":
     main()
