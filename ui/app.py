@@ -6,6 +6,12 @@
 
 import math
 import re
+from pathlib import Path
+
+import tkinter as tk
+
+from PIL import Image, ImageTk
+
 
 import customtkinter as ctk
 
@@ -71,6 +77,7 @@ class CalculatorApp(ctk.CTk):
         self.title("Науковий калькулятор — ІПЗ-22")
         self.geometry("880x620")
         self.minsize(820, 580)
+        self.configure(fg_color="#242424")
 
         ctk.set_appearance_mode("dark")
         ctk.set_default_color_theme("blue")
@@ -86,12 +93,10 @@ class CalculatorApp(ctk.CTk):
         self._bind_keyboard()
 
     # Побудова інтерфейсу
-    # Побудова інтерфейсу
-    # Побудова інтерфейсу
 
     def _build_calculator(self) -> None:
         """Створює поле виразу, перемикач кутів і кнопки."""
-        container = ctk.CTkFrame(self, corner_radius=12)
+        container = ctk.CTkFrame(self, corner_radius=12, fg_color="#2b2b2b")
         container.grid(row=0, column=0, sticky="nsew", padx=(16, 8), pady=16)
         container.grid_columnconfigure((0, 1, 2, 3), weight=1)
         container.grid_rowconfigure(6, weight=1)
@@ -100,6 +105,8 @@ class CalculatorApp(ctk.CTk):
         self.display = ctk.CTkEntry(
             container,
             textvariable=self.expression,
+            fg_color="#343638",
+            border_color="#565b5e",
             font=ctk.CTkFont(size=34, weight="bold"),
             justify="right",
             height=76,
@@ -179,18 +186,42 @@ class CalculatorApp(ctk.CTk):
                           fill=ACCENT, hover=ACCENT_HOVER)
 
     def _build_side_panel(self) -> None:
-        """Створює заглушку панелі історії для подальшої інтеграції."""
-        panel = ctk.CTkFrame(self, corner_radius=12, width=280)
+        """Заповнює панель історії ілюстрацією без обрізання персонажа."""
+        panel = ctk.CTkFrame(self, corner_radius=12, width=280, fg_color="#2b2b2b")
         panel.grid(row=0, column=1, sticky="nsew", padx=(8, 16), pady=16)
         panel.grid_propagate(False)
-
+        panel.grid_columnconfigure(0, weight=1)
+        panel.grid_rowconfigure(1, weight=1)
         ctk.CTkLabel(
             panel, text="ІСТОРІЯ", font=ctk.CTkFont(size=12, weight="bold"), text_color=MUTED,
-        ).pack(anchor="w", padx=14, pady=(14, 4))
+        ).grid(row=0, column=0, sticky="w", padx=14, pady=(14, 4))
+        self._art_label = tk.Label(panel, bg="#2b2b2b", borderwidth=0)
+        self._art_label.grid(row=1, column=0, sticky="nsew", padx=8, pady=(4, 8))
+        path = Path(__file__).resolve().parents[1] / "assets" / "background.png"
+        with Image.open(path) as source:
+            self._art_source = source.convert("RGBA")
+        self._art_job = None
+        self._art_label.bind("<Configure>", self._schedule_art)
 
-        ctk.CTkLabel(
-            panel, text="Історію буде додано окремо", text_color=MUTED, font=ctk.CTkFont(size=12),
-        ).pack(padx=14, pady=10)
+    def _schedule_art(self, event) -> None:
+        """Оновлює розмір PNG разом із панеллю історії."""
+        if self._art_job is not None:
+            self.after_cancel(self._art_job)
+        self._art_job = self.after(60, self._resize_art)
+
+    def _resize_art(self) -> None:
+        """Показує максимально велику PNG, що повністю вміщується в панелі."""
+        self._art_job = None
+        width = max(1, self._art_label.winfo_width())
+        height = max(1, self._art_label.winfo_height())
+        source = self._art_source
+        scale = min(width / source.width, height / source.height)
+        image = source.resize(
+            (max(1, round(source.width * scale)), max(1, round(source.height * scale))),
+            Image.Resampling.LANCZOS,
+        )
+        self._art_photo = ImageTk.PhotoImage(image)
+        self._art_label.configure(image=self._art_photo)
 
     def _make_button(self, parent, caption, command, row, column,
                      columnspan=1, fill=None, hover=None, height=52):
@@ -218,8 +249,6 @@ class CalculatorApp(ctk.CTk):
         self.bind("<KP_Enter>", lambda event: self._calculate())
         self.bind("<Escape>", lambda event: self._clear())
 
-    # Обробка дій користувача
-    # Обробка дій користувача
     # Обробка дій користувача
 
     def _on_angle_mode_changed(self, value: str) -> None:
