@@ -9,7 +9,7 @@
 
 | ПІБ | Роль | GitHub |
 |---|---|---|
-| Дмитрук Назар Сергійович | Team Lead | [@USERNAME](https://github.com/USERNAME) |
+| Дмитрук Назар Сергійович | Team Lead | [@USERNAME](https://github.com/Hyrysake) |
 | Махнюк Андрій Сергійович | Developer | [@azureflarez](https://github.com/azureflarez) |
 | Бардюк Станіслав Олександрович | QA | [@st009bar-dot](https://github.com/st009bar-dot) |
 
