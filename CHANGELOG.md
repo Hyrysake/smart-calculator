@@ -36,4 +36,4 @@
   (натуральний логарифм — окрема функція `ln`).
 - Інтерфейс не масштабується під дуже малі вікна (мінімальний розмір 820×580).
 
-[1.0.0]: https://github.com/USERNAME/smart-calculator/releases/tag/v1.0.0
+[1.0.0]: https://github.com/Hyrysake/smart-calculator/releases/tag/v1.0.0
