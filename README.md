@@ -102,7 +102,7 @@ python -m pytest -v
 | ПІБ | Роль | GitHub | Зона відповідальності |
 |---|---|---|---|
 | Дмитрук Назар Сергійович | Team Lead | [@Hyrysake](https://github.com/Hyrysake) | `core/tokenizer.py`, `core/evaluator.py`, структура репозиторію, документація, реліз |
-| Махнюк Андрій Сергійович | Developer | [@azureflarez](https://github.com/azureflarez) | `core/scientific.py`, `ui/app.py`, `main.py` |
+| Махнюк Андрій Сергійович | Developer | [@rotterdamsterdam](https://github.com/rotterdamsterdam) | `core/scientific.py`, `ui/app.py`, `main.py` |
 | Бардюк Станіслав Олександрович | QA | [@st009bar-dot](https://github.com/st009bar-dot) | `core/history.py`, `ui/history_panel.py`, `tests/` |
 
 Колонка GitHub наведена навмисно: облікові записи учасників не завжди названі повним
